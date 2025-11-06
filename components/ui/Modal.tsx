@@ -7,6 +7,8 @@ interface ModalProps {
   title: string;
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  actions?: React.ReactNode;
+  hideClose?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -15,6 +17,8 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
   size = 'md',
+  actions,
+  hideClose = false,
 }) => {
   if (!isOpen) return null;
 
@@ -39,16 +43,25 @@ export const Modal: React.FC<ModalProps> = ({
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            {!hideClose && (
+              <button
+                onClick={onClose}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
           </div>
 
           {/* Content */}
           <div className="px-6 py-4">{children}</div>
+
+          {/* Actions */}
+          {actions && (
+            <div className="flex gap-3 px-6 py-4 border-t border-gray-200">
+              {actions}
+            </div>
+          )}
         </div>
       </div>
     </div>

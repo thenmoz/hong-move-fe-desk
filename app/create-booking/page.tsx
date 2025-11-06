@@ -1,16 +1,66 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import { Modal } from "@/components/ui/Modal";
 
 export default function CreateBookingPage() {
+  const router = useRouter();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [formData, setFormData] = useState({
+    bookingId: "1234xxxxxx",
+    fullName: "",
+    phone: "",
+    email: "",
+    origin: "",
+    destination: "",
+    date: "",
+    month: "",
+    year: "",
+    hour: "",
+    minute: "",
+  });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    setFormData({
+      bookingId: "1234xxxxxx",
+      fullName: data.get("fullName") as string,
+      phone: data.get("phone") as string,
+      email: data.get("email") as string,
+      origin: data.get("origin") as string,
+      destination: data.get("destination") as string,
+      date: data.get("date") as string,
+      month: data.get("month") as string,
+      year: data.get("year") as string,
+      hour: data.get("hour") as string,
+      minute: data.get("minute") as string,
+    });
+
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirm = () => {
+    // TODO: Save booking to database/API
+    setShowConfirmModal(false);
+    // Navigate to booking detail page
+    router.push(`/booking/${formData.bookingId}`);
+  };
+
   return (
     <DashboardLayout>
       <div className="mx-auto max-w-4xl">
-            <h1 className="text-3xl font-semibold text-slate-800 sm:text-4xl">
-              สร้างหมายเลขบุ๊คกิ้ง
-            </h1>
+        <h1 className="text-3xl font-semibold text-slate-800 sm:text-4xl">
+          สร้างหมายเลขบุ๊คกิ้ง
+        </h1>
 
-            <form className="mt-10 space-y-10">
+        <form onSubmit={handleSubmit} className="mt-10 space-y-10">
               {/* ข้อมูลผู้โดยสาร */}
               <section>
                 <h2 className="text-lg font-semibold text-slate-700">
@@ -237,9 +287,43 @@ export default function CreateBookingPage() {
                 >
                   สร้างบุ๊กกิ้ง
                 </button>
-              </div>
-            </form>
           </div>
+        </form>
+
+        {/* Confirmation Modal */}
+        <Modal
+          isOpen={showConfirmModal}
+          onClose={() => setShowConfirmModal(false)}
+          title="ยืนยันก่อนการสร้าง"
+          size="sm"
+          actions={
+            <>
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="flex-1 rounded-lg border border-slate-300 bg-white px-6 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={handleConfirm}
+                className="flex-1 rounded-lg bg-[#8b0000] px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6b0000]"
+              >
+                ยืนยัน
+              </button>
+            </>
+          }
+        >
+          <div className="text-center">
+            <p className="text-lg font-semibold text-slate-800">
+              หมายเลขบุ๊กกิ้ง{" "}
+              <span className="text-[#8b0000]">{formData.bookingId}</span>
+            </p>
+            <p className="mt-3 text-sm text-slate-600">
+              คนขับจะได้รับอีเมลไปยัง {formData.email || "Test@test.com"}
+            </p>
+          </div>
+        </Modal>
+      </div>
     </DashboardLayout>
   );
 }
