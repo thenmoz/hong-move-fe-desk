@@ -19,9 +19,9 @@ const navigation = [
 ];
 
 const quickActions = [
-  { label: "เพิ่ม" },
-  { label: "เพิ่มยูนิต" },
-  { label: "สร้างนายหน้าพิเศษ" },
+  { label: "เพิ่มรถ", href: "#" },
+  { label: "เพิ่มคนขับ", href: "#" },
+  { label: "สร้างหมายเลขบุ๊คกิ้ง", href: "/create-booking" },
 ];
 
 const overviewStats = [
@@ -120,28 +120,18 @@ export default function DashboardPage() {
               </h1>
             </div>
             <div className="flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-5 py-2.5 shadow-sm">
-                <CalendarDays className="h-5 w-5 text-slate-600" />
-                <p className="text-sm font-medium text-slate-700">
-                  20 / คย เม - 20 / คย เม
-                </p>
-              </div>
-            </div>
-          </header>
-
-          <section aria-label="Quick actions" className="mt-10">
-            <div className="flex flex-wrap gap-4">
               {quickActions.map((action) => (
-                <button
+                <Link
                   key={action.label}
+                  href={action.href}
                   className="flex items-center gap-2 rounded-lg bg-[#8b0000] px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6b0000]"
                 >
                   <Plus className="h-4 w-4" />
                   {action.label}
-                </button>
+                </Link>
               ))}
             </div>
-          </section>
+          </header>
 
           <section aria-label="Overview stats" className="mt-10">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">

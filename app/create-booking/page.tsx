@@ -62,14 +62,14 @@ export default function CreateBookingPage() {
         <main className="flex-1 px-6 py-10 sm:px-8 lg:px-12">
           <div className="mx-auto max-w-4xl">
             <h1 className="text-3xl font-semibold text-slate-800 sm:text-4xl">
-              สร้างนายหน้าเสนอบุ๊กกิ้ง
+              สร้างหมายเลขบุ๊คกิ้ง
             </h1>
 
             <form className="mt-10 space-y-10">
-              {/* ข้อมูลโอเสาส */}
+              {/* ข้อมูลผู้โดยสาร */}
               <section>
                 <h2 className="text-lg font-semibold text-slate-700">
-                  ข้อมูลโอเสาส
+                  ข้อมูลผู้โดยสาร
                 </h2>
                 <div className="mt-6 grid gap-6 sm:grid-cols-2">
                   <div>
@@ -150,21 +150,18 @@ export default function CreateBookingPage() {
                 <div className="mt-6 grid gap-6 sm:grid-cols-2">
                   <div>
                     <label
-                      htmlFor="status"
+                      htmlFor="origin"
                       className="block text-sm font-medium text-slate-600"
                     >
-                      สถานะ
+                      ต้นทาง
                     </label>
-                    <select
-                      id="status"
-                      name="status"
-                      className="mt-2 w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-700 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
-                    >
-                      <option>สร้างนายหน้าจริง</option>
-                      <option>รอดำเนินการ</option>
-                      <option>ยืนยันแล้ว</option>
-                      <option>ยกเลิก</option>
-                    </select>
+                    <input
+                      type="text"
+                      id="origin"
+                      name="origin"
+                      placeholder="สร้างนายหน้าพิเศษ"
+                      className="mt-2 w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                    />
                   </div>
 
                   <div>
@@ -188,7 +185,7 @@ export default function CreateBookingPage() {
                       htmlFor="date"
                       className="block text-sm font-medium text-slate-600"
                     >
-                      วันที่/เวลา*
+                      วันเดินทาง*
                     </label>
                     <div className="mt-2 flex gap-2">
                       <select
@@ -243,7 +240,7 @@ export default function CreateBookingPage() {
                       htmlFor="time"
                       className="block text-sm font-medium text-slate-600"
                     >
-                      เวลาที่นัดหมาย*
+                      เวลาเดินทาง*
                     </label>
                     <div className="mt-2 flex gap-2">
                       <select
