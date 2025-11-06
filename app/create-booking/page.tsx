@@ -1,0 +1,305 @@
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
+
+const navigation = [
+  { label: "แดชบอร์ด", href: "/dashboard" },
+  { label: "จัดการนัดหมาย", href: "/manage-booking", active: true },
+  { label: "จัดการยูนิต", href: "#" },
+  { label: "จัดการแคมเปญ", href: "#" },
+];
+
+export default function CreateBookingPage() {
+  const todayLabel = new Intl.DateTimeFormat("th-TH", {
+    dateStyle: "long",
+  }).format(new Date());
+
+  return (
+    <div className="min-h-screen bg-slate-100 text-slate-900">
+      <div className="flex min-h-screen w-full bg-white shadow-sm">
+        {/* Sidebar */}
+        <aside className="hidden w-72 flex-col justify-between border-r border-black/10 bg-[#5c0000] px-6 py-10 text-white lg:flex">
+          <div>
+            <Link href="/" className="block">
+              <Image
+                src="/hongmove-logo.png"
+                alt="Hongmove Logo"
+                width={96}
+                height={96}
+                className="mx-auto h-24 w-24 object-contain"
+              />
+            </Link>
+
+            <nav className="mt-12 space-y-3">
+              {navigation.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`block rounded-xl px-4 py-3 text-sm font-medium transition-colors ${
+                    item.active
+                      ? "bg-white/15 text-white shadow-inner"
+                      : "text-white/70 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          <div className="rounded-2xl border border-white/15 bg-white/10 p-5">
+            <p className="text-sm font-semibold">Admin</p>
+            <p className="mt-1 text-xs text-white/70">
+              เข้าสู่ระบบเมื่อ {todayLabel}
+            </p>
+            <button className="mt-6 w-full rounded-xl bg-white/90 px-4 py-2 text-sm font-semibold text-[#5c0000] transition-colors hover:bg-white">
+              ออกจากระบบ
+            </button>
+          </div>
+        </aside>
+
+        {/* Main content */}
+        <main className="flex-1 px-6 py-10 sm:px-8 lg:px-12">
+          <div className="mx-auto max-w-4xl">
+            <h1 className="text-3xl font-semibold text-slate-800 sm:text-4xl">
+              สร้างนายหน้าเสนอบุ๊กกิ้ง
+            </h1>
+
+            <form className="mt-10 space-y-10">
+              {/* ข้อมูลโอเสาส */}
+              <section>
+                <h2 className="text-lg font-semibold text-slate-700">
+                  ข้อมูลโอเสาส
+                </h2>
+                <div className="mt-6 grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="bookingId"
+                      className="block text-sm font-medium text-slate-600"
+                    >
+                      Booking ID
+                    </label>
+                    <input
+                      type="text"
+                      id="bookingId"
+                      name="bookingId"
+                      defaultValue="12345xxxx"
+                      className="mt-2 w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                      disabled
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="fullName"
+                      className="block text-sm font-medium text-slate-600"
+                    >
+                      ชื่อ-นามสกุล*
+                    </label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      placeholder="Test Test"
+                      className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-slate-600"
+                    >
+                      เบอร์โทรศัพท์*
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      placeholder="012-345-6789"
+                      className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-slate-600"
+                    >
+                      อีเมล*
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="Test@test.com"
+                      className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                      required
+                    />
+                  </div>
+                </div>
+              </section>
+
+              {/* ข้อมูลการเดินทาง */}
+              <section>
+                <h2 className="text-lg font-semibold text-slate-700">
+                  ข้อมูลการเดินทาง
+                </h2>
+                <div className="mt-6 grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="status"
+                      className="block text-sm font-medium text-slate-600"
+                    >
+                      สถานะ
+                    </label>
+                    <select
+                      id="status"
+                      name="status"
+                      className="mt-2 w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-700 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                    >
+                      <option>สร้างนายหน้าจริง</option>
+                      <option>รอดำเนินการ</option>
+                      <option>ยืนยันแล้ว</option>
+                      <option>ยกเลิก</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="destination"
+                      className="block text-sm font-medium text-slate-600"
+                    >
+                      ปลายทาง*
+                    </label>
+                    <input
+                      type="text"
+                      id="destination"
+                      name="destination"
+                      className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="date"
+                      className="block text-sm font-medium text-slate-600"
+                    >
+                      วันที่/เวลา*
+                    </label>
+                    <div className="mt-2 flex gap-2">
+                      <select
+                        id="date"
+                        name="date"
+                        className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                        required
+                      >
+                        <option value="">วัน</option>
+                        {Array.from({ length: 31 }, (_, i) => i + 1).map(
+                          (day) => (
+                            <option key={day} value={day}>
+                              {day}
+                            </option>
+                          )
+                        )}
+                      </select>
+                      <select
+                        name="month"
+                        className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                        required
+                      >
+                        <option value="">เดือน</option>
+                        <option value="01">ม.ค.</option>
+                        <option value="02">ก.พ.</option>
+                        <option value="03">มี.ค.</option>
+                        <option value="04">เม.ย.</option>
+                        <option value="05">พ.ค.</option>
+                        <option value="06">มิ.ย.</option>
+                        <option value="07">ก.ค.</option>
+                        <option value="08">ส.ค.</option>
+                        <option value="09">ก.ย.</option>
+                        <option value="10">ต.ค.</option>
+                        <option value="11">พ.ย.</option>
+                        <option value="12">ธ.ค.</option>
+                      </select>
+                      <select
+                        name="year"
+                        className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                        required
+                      >
+                        <option value="">ปี</option>
+                        <option value="2567">2567</option>
+                        <option value="2568">2568</option>
+                        <option value="2569">2569</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="time"
+                      className="block text-sm font-medium text-slate-600"
+                    >
+                      เวลาที่นัดหมาย*
+                    </label>
+                    <div className="mt-2 flex gap-2">
+                      <select
+                        id="time"
+                        name="hour"
+                        className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                        required
+                      >
+                        <option value="">ชม.</option>
+                        {Array.from({ length: 24 }, (_, i) =>
+                          i.toString().padStart(2, "0")
+                        ).map((hour) => (
+                          <option key={hour} value={hour}>
+                            {hour}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        name="minute"
+                        className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                        required
+                      >
+                        <option value="">นาที</option>
+                        {Array.from({ length: 60 }, (_, i) =>
+                          i.toString().padStart(2, "0")
+                        ).map((minute) => (
+                          <option key={minute} value={minute}>
+                            {minute}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Action buttons */}
+              <div className="flex gap-4 pt-6">
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-6 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  กลับ
+                </Link>
+                <button
+                  type="submit"
+                  className="flex-1 rounded-lg bg-[#8b0000] px-6 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6b0000] sm:flex-initial"
+                >
+                  สร้างบุ๊กกิ้ง
+                </button>
+              </div>
+            </form>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
