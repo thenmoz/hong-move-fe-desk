@@ -1,0 +1,718 @@
+{
+  "info": {
+    "name": "Hongmove Backend API",
+    "_postman_id": "b6bcb274-7d0e-49d0-9d1c-5569724d2baf",
+    "description": "Contract tests for bookings, trips, and payments per specs/001-build-backend-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"passenger_name\": \"John Doe\",\n  \"passenger_email\": \"john@example.com\",\n  \"passenger_phone\": \"+66812345678\",\n  \"pickup_location\": \"Suvarnabhumi Airport Terminal 2\",\n  \"dropoff_location\": \"Sukhumvit Soi 11, Bangkok\",\n  \"pickup_time\": \"2025-11-06T14:30:00+07:00\",\n  \"pickup_timezone\": \"Asia/Bangkok\",\n  \"passenger_notes\": \"Gate 5\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bookings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.test('returns success envelope', function () {",
+                  "  pm.expect(json).to.have.property('success', true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Booking",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.test('returns success envelope', function () {",
+                  "  pm.expect(json.success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings?date={{bookingDate}}&status=pending&page=1&limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "{{bookingDate}}"
+                },
+                {
+                  "key": "status",
+                  "value": "pending"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Resend Booking Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/bookings/{{bookingId}}/resend-email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "{{bookingId}}",
+                "resend-email"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const response = pm.response;",
+                  "const json = response.json();",
+                  "pm.test('resend obeys envelope', function () {",
+                  "  pm.expect(json.success).to.eql(true);",
+                  "});",
+                  "pm.test('retry-after header present on 429', function () {",
+                  "  if (response.code === 429) {",
+                  "    pm.expect(response.headers.has('Retry-After')).to.eql(true);",
+                  "  }",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Update Booking",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"passenger_name\": \"Updated Demo\",\n  \"pickup_time\": \"2025-11-06T15:30:00+07:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bookings/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.test('returns success envelope', function () {",
+                  "  pm.expect(json.success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\\n  \\\"cancellation_reason\\\": \\\"Customer request\\\"\\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bookings/{{bookingId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bookings",
+                "{{bookingId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.test('returns success envelope', function () {",
+                  "  pm.expect(json.success).to.eql(true);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Trips",
+      "item": [
+        {
+          "name": "Start Trip",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{driverToken}}"
+              },
+              {
+                "key": "X-API-Key",
+                "value": "{{posApiKey}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "{{deviceId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"driver_id\": \"{{driverId}}\",\n  \"vehicle_plate\": \"ABC-1234\",\n  \"device_id\": \"{{deviceId}}\",\n  \"booking_number\": \"{{bookingNumber}}\",\n  \"start_location\": {\n    \"lat\": 13.7563,\n    \"lng\": 100.5018,\n    \"accuracy\": 5.2,\n    \"timestamp\": \"2025-11-06T14:30:00Z\",\n    \"provider\": \"mappointasia\"\n  },\n  \"meter_start\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceId}}\",\n    \"timestamp\": \"2025-11-06T14:30:00Z\",\n    \"initial_reading\": 0\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/trips/start",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "trips",
+                "start"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.test('includes POS headers', function () {",
+                  "  pm.expect(pm.request.headers.get('X-API-Key')).to.eql(pm.environment.get('posApiKey'));",
+                  "  pm.expect(pm.request.headers.get('X-Device-ID')).to.eql(pm.environment.get('deviceId'));",
+                  "});",
+                  "pm.test('trip start succeeds', function () {",
+                  "  pm.expect(pm.response.code).to.eql(201);",
+                  "  pm.expect(json).to.have.property('success', true);",
+                  "  pm.expect(json.data).to.have.property('trip_id');",
+                  "});",
+                  "pm.environment.set('tripId', json.data.trip_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Stop Trip",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{driverToken}}"
+              },
+              {
+                "key": "X-API-Key",
+                "value": "{{posApiKey}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "{{deviceId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"device_id\": \"{{deviceId}}\",\n  \"booking_number\": \"{{bookingNumber}}\",\n  \"stop_location\": {\n    \"lat\": 13.7563,\n    \"lng\": 100.4918,\n    \"accuracy\": 4.8,\n    \"timestamp\": \"2025-11-06T15:10:00Z\",\n    \"provider\": \"thaistar\"\n  },\n  \"meter_end\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceId}}\",\n    \"timestamp\": \"2025-11-06T15:10:00Z\",\n    \"final_reading\": 23.5,\n    \"trip_summary\": {\n      \"distance_km\": 18.2,\n      \"duration_minutes\": 40,\n      \"fare\": {\n        \"base_fare\": 35,\n        \"distance_fare\": 150,\n        \"time_fare\": 45,\n        \"surcharge\": 20,\n        \"total_fare\": 250,\n        \"currency\": \"THB\"\n      }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/trips/{{tripId}}/stop",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "trips",
+                "{{tripId}}",
+                "stop"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.test('includes POS headers', function () {",
+                  "  pm.expect(pm.request.headers.get('X-API-Key')).to.eql(pm.environment.get('posApiKey'));",
+                  "  pm.expect(pm.request.headers.get('X-Device-ID')).to.eql(pm.environment.get('deviceId'));",
+                  "});",
+                  "pm.test('trip stop returns payment reference', function () {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  pm.expect(json).to.have.property('success', true);",
+                  "  pm.expect(json.data.payment).to.have.property('payment_id');",
+                  "});",
+                  "pm.environment.set('paymentId', json.data.payment.payment_id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Stop Trip - Device Mismatch",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{driverToken}}"
+              },
+              {
+                "key": "X-API-Key",
+                "value": "{{posApiKey}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "{{deviceMismatchId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"device_id\": \"{{deviceMismatchId}}\",\n  \"booking_number\": \"{{bookingNumber}}\",\n  \"stop_location\": {\n    \"lat\": 13.7500,\n    \"lng\": 100.4800,\n    \"accuracy\": 5,\n    \"timestamp\": \"2025-11-06T15:12:00Z\",\n    \"provider\": \"mappointasia\"\n  },\n  \"meter_end\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceMismatchId}}\",\n    \"timestamp\": \"2025-11-06T15:12:00Z\",\n    \"final_reading\": 10.5,\n    \"trip_summary\": {\n      \"distance_km\": 10.5,\n      \"duration_minutes\": 30,\n      \"fare\": {\n        \"base_fare\": 35,\n        \"distance_fare\": 120,\n        \"time_fare\": 30,\n        \"surcharge\": 0,\n        \"total_fare\": 185,\n        \"currency\": \"THB\"\n      }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/trips/{{tripId}}/stop",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "trips",
+                "{{tripId}}",
+                "stop"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.test('device mismatch rejected', function () {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "  pm.expect(json).to.have.property('success', false);",
+                  "  pm.expect(json.error.code).to.eql('DEVICE_MISMATCH');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Stop Trip - Missing Start",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{driverToken}}"
+              },
+              {
+                "key": "X-API-Key",
+                "value": "{{posApiKey}}"
+              },
+              {
+                "key": "X-Device-ID",
+                "value": "{{deviceId}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"device_id\": \"{{deviceId}}\",\n  \"stop_location\": {\n    \"lat\": 13.7200,\n    \"lng\": 100.5200,\n    \"accuracy\": 4.6,\n    \"timestamp\": \"2025-11-06T15:20:00Z\",\n    \"provider\": \"mappointasia\"\n  },\n  \"meter_end\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceId}}\",\n    \"timestamp\": \"2025-11-06T15:20:00Z\",\n    \"final_reading\": 14.5,\n    \"trip_summary\": {\n      \"distance_km\": 14.5,\n      \"duration_minutes\": 38,\n      \"fare\": {\n        \"base_fare\": 35,\n        \"distance_fare\": 170,\n        \"time_fare\": 40,\n        \"surcharge\": 10,\n        \"total_fare\": 255,\n        \"currency\": \"THB\"\n      }\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/trips/{{missingTripId}}/stop",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "trips",
+                "{{missingTripId}}",
+                "stop"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();",
+                  "pm.test('missing start handled', function () {",
+                  "  pm.expect(pm.response.code).to.eql(404);",
+                  "  pm.expect(json).to.have.property('success', false);",
+                  "  pm.expect(json.error.code).to.eql('TRIP_NOT_FOUND');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Poll Payment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{driverToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments/{{paymentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "{{paymentId}}"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('polls payment successfully', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('envelope present', function () { pm.expect(json.success).to.be.true; });",
+                  "pm.test('includes payment payload', function () { pm.expect(json.data).to.have.property('payment_id'); pm.expect(json.data).to.have.property('payment_status'); });",
+                  "pm.test('includes polling hints', function () { pm.expect(json.data).to.have.property('poll_again_in_seconds'); pm.expect(json.data).to.have.property('timeout_after_seconds'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List Payments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payments?payment_status=paid&page=1&limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments"
+              ],
+              "query": [
+                {
+                  "key": "payment_status",
+                  "value": "paid"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('lists payments with pagination', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('has payments array', function () { pm.expect(json.data.payments).to.be.an('array'); });",
+                  "pm.test('has pagination metadata', function () { pm.expect(json.data.pagination).to.have.keys(['total','page','limit','totalPages']); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Omise Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Omise-Signature",
+                "value": "{{omiseSignature}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"evt_test\",\n  \"type\": \"charge.complete\",\n  \"data\": {\n    \"id\": \"chrg_test\",\n    \"status\": \"successful\",\n    \"amount\": 25000\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/omise/webhook",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "omise",
+                "webhook"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('webhook accepted', function () { pm.response.to.have.status(200); });",
+                  "const json = pm.response.json();",
+                  "pm.test('acknowledges receipt', function () { pm.expect(json.success).to.be.true; pm.expect(json.received).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Omise Webhook Missing Signature",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"evt_test\",\n  \"type\": \"charge.complete\",\n  \"data\": {\n    \"id\": \"chrg_test\",\n    \"status\": \"successful\",\n    \"amount\": 25000\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payments/omise/webhook",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payments",
+                "omise",
+                "webhook"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('missing signature rejected', function () { pm.response.to.have.status(400); });",
+                  "const json = pm.response.json();",
+                  "pm.test('provides error envelope', function () { pm.expect(json.success).to.be.false; pm.expect(json.error.code).to.eql('OMISE_SIGNATURE_MISSING'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "agentToken",
+      "value": "<staff-token>"
+    },
+    {
+      "key": "driverToken",
+      "value": "<driver-token>"
+    },
+    {
+      "key": "posApiKey",
+      "value": "<pos-api-key>"
+    },
+    {
+      "key": "deviceId",
+      "value": "POS-001"
+    },
+    {
+      "key": "deviceMismatchId",
+      "value": "POS-002"
+    },
+    {
+      "key": "driverId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "bookingId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "bookingNumber",
+      "value": "BK20251106001"
+    },
+    {
+      "key": "tripId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "missingTripId",
+      "value": "00000000-0000-4000-8000-000000000000"
+    },
+    {
+      "key": "paymentId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "bookingDate",
+      "value": "2025-11-06"
+    },
+    {
+      "key": "omiseSignature",
+      "value": "<replace-with-signature>"
+    }
+  ]
+}
