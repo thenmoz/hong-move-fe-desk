@@ -6,7 +6,6 @@ import { th } from 'date-fns/locale';
 import { Eye, Mail, Edit, DollarSign } from 'lucide-react';
 import { Booking } from '@/types/booking';
 import { PaymentBadge, JobStatusBadge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
 
 interface BookingTableProps {
   bookings: Booking[];

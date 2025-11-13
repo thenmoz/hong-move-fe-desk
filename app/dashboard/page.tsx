@@ -20,9 +20,9 @@ const navigation = [
 ];
 
 const quickActions = [
-  { label: "เพิ่มรถ", icon: Truck },
-  { label: "เพิ่มพนักงานขับ", icon: Users },
-  { label: "สร้างหมายเลขบุ๊กกิ้งใหม่", icon: ClipboardPlus },
+  { label: "เพิ่มรถ", icon: Truck, href: "#" },
+  { label: "เพิ่มพนักงานขับ", icon: Users, href: "#" },
+  { label: "สร้างหมายเลขบุ๊กกิ้งใหม่", icon: ClipboardPlus, href: "/dashboard/bookings/new" },
 ];
 
 const overviewStats = [
@@ -170,13 +170,14 @@ export default function DashboardPage() {
           <section aria-label="Quick actions" className="mt-10">
             <div className="flex flex-wrap gap-4">
               {quickActions.map((action) => (
-                <button
+                <Link
                   key={action.label}
-                  className="flex items-center gap-3 rounded-full bg-[#5c0000] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#5c0000]/20 transition-transform hover:-translate-y-0.5 hover:bg-[#7a0a0a]"
+                  href={action.href}
+                  className="flex items-center gap-3 rounded-full bg-[#7a0a0a] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#7a0a0a]/20 transition-transform hover:-translate-y-0.5 hover:bg-[#5c0000]"
                 >
                   <action.icon className="h-4 w-4" />
                   {action.label}
-                </button>
+                </Link>
               ))}
             </div>
           </section>
