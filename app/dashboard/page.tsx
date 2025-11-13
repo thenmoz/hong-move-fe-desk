@@ -10,8 +10,6 @@ import {
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
 const quickActions = [
-  { label: "เพิ่มรถ", href: "#" },
-  { label: "เพิ่มคนขับ", href: "#" },
   { label: "สร้างหมายเลขบุ๊คกิ้ง", href: "/create-booking" },
 ];
 

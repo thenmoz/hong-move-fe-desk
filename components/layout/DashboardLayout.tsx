@@ -7,8 +7,6 @@ import { usePathname } from "next/navigation";
 const navigation = [
   { label: "แดชบอร์ด", href: "/dashboard" },
   { label: "จัดการนัดหมาย", href: "/manage-booking" },
-  { label: "จัดการยูนิต", href: "#" },
-  { label: "จัดการแคมเปญ", href: "#" },
 ];
 
 interface DashboardLayoutProps {
@@ -31,9 +29,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Image
                 src="/hongmove-logo.png"
                 alt="Hongmove Logo"
-                width={96}
-                height={96}
-                className="mx-auto h-24 w-24 object-contain"
+                width={128}
+                height={128}
+                className="mx-auto h-32 w-32 object-contain"
               />
             </Link>
 
@@ -71,7 +69,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 px-6 py-10 sm:px-8 lg:px-12">{children}</main>
+        <main className="flex-1 px-6 py-10">{children}</main>
       </div>
     </div>
   );
