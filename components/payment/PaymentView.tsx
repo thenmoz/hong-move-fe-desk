@@ -49,11 +49,6 @@ export const PaymentView: React.FC<PaymentViewProps> = ({
             </div>
 
             <div className="flex justify-between">
-              <span className="text-gray-500">Flight:</span>
-              <span className="font-semibold text-gray-900">{booking.flightNumber}</span>
-            </div>
-
-            <div className="flex justify-between">
               <span className="text-gray-500">เวลาเดินทาง:</span>
               <span className="font-semibold text-gray-900">
                 {formatDateTime(booking.travelDateTime)}

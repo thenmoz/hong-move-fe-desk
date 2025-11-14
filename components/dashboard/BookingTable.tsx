@@ -48,9 +48,6 @@ export const BookingTable: React.FC<BookingTableProps> = ({
                 ผู้โดยสาร
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Flight
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 เวลาเดินทาง
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -78,11 +75,6 @@ export const BookingTable: React.FC<BookingTableProps> = ({
                 <td className="px-6 py-4">
                   <div className="text-sm text-gray-900">{booking.passengerName}</div>
                   <div className="text-sm text-gray-500">{booking.phone}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    {booking.flightNumber}
-                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">

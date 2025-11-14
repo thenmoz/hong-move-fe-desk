@@ -21,7 +21,6 @@ export const BookingForm: React.FC<BookingFormProps> = ({
     passengerName: booking?.passengerName || '',
     phone: booking?.phone || '',
     email: booking?.email || '',
-    flightNumber: booking?.flightNumber || '',
     pickupLocation: booking?.pickupLocation || '',
     dropoffLocation: booking?.dropoffLocation || '',
     travelDateTime: booking?.travelDateTime
@@ -75,21 +74,6 @@ export const BookingForm: React.FC<BookingFormProps> = ({
                 className="md:col-span-2"
               />
             </div>
-          </div>
-
-          {/* ข้อมูลเที่ยวบิน */}
-          <div>
-            <h4 className="text-md font-semibold text-gray-900 mb-3">
-              ข้อมูลเที่ยวบิน
-            </h4>
-            <Input
-              label="Flight Number *"
-              type="text"
-              placeholder="TG401, DD8823, etc."
-              value={formData.flightNumber}
-              onChange={(e) => handleChange('flightNumber', e.target.value)}
-              required
-            />
           </div>
 
           {/* จุดรับ-ส่ง */}

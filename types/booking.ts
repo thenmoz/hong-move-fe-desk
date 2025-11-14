@@ -16,9 +16,6 @@ export interface Booking {
   phone: string;
   email: string;
 
-  // ข้อมูลเที่ยวบิน
-  flightNumber: string;
-
   // จุดรับ-ส่ง
   pickupLocation: string;
   dropoffLocation: string;
@@ -45,7 +42,6 @@ export interface BookingFormData {
   passengerName: string;
   phone: string;
   email: string;
-  flightNumber: string;
   pickupLocation: string;
   dropoffLocation: string;
   travelDateTime: string;
@@ -57,7 +53,6 @@ export interface SearchFilters {
   dateTo?: string;
   bookingNumber?: string;
   passengerName?: string;
-  flightNumber?: string;
   paymentStatus?: PaymentStatus | 'all';
   jobStatus?: JobStatus | 'all';
 }

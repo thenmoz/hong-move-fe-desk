@@ -16,7 +16,6 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({ onFilterChange }) =>
     dateTo: '',
     bookingNumber: '',
     passengerName: '',
-    flightNumber: '',
     paymentStatus: 'all',
     jobStatus: 'all',
   });
@@ -36,7 +35,6 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({ onFilterChange }) =>
       dateTo: '',
       bookingNumber: '',
       passengerName: '',
-      flightNumber: '',
       paymentStatus: 'all',
       jobStatus: 'all',
     };
@@ -84,15 +82,6 @@ export const SearchFilter: React.FC<SearchFilterProps> = ({ onFilterChange }) =>
           placeholder="ชื่อผู้โดยสาร"
           value={filters.passengerName || ''}
           onChange={(e) => handleChange('passengerName', e.target.value)}
-        />
-
-        {/* Flight Number */}
-        <Input
-          type="text"
-          label="Flight Number"
-          placeholder="TG401"
-          value={filters.flightNumber || ''}
-          onChange={(e) => handleChange('flightNumber', e.target.value)}
         />
 
         {/* Payment Status */}

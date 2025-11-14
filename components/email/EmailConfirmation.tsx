@@ -78,11 +78,6 @@ export const EmailConfirmation: React.FC<EmailConfirmationProps> = ({
             </div>
 
             <div className="col-span-2">
-              <span className="text-gray-500">Flight:</span>
-              <p className="font-semibold text-gray-900">{booking.flightNumber}</p>
-            </div>
-
-            <div className="col-span-2">
               <span className="text-gray-500">เวลาเดินทาง:</span>
               <p className="font-semibold text-gray-900">
                 {formatDateTime(booking.travelDateTime)}
