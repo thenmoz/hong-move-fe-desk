@@ -1,12 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const highlightItems = [
-  "ติดตามสถานะการเดินทางแบบเรียลไทม์",
-  "จัดการรถและพนักงานขับในที่เดียว",
-  "สรุปรายได้รายวันอย่างชัดเจน",
-];
-
 export default function LoginPage() {
   return (
     <div className="relative min-h-screen bg-[#6B0000]">
@@ -40,7 +34,7 @@ export default function LoginPage() {
                 name="username"
                 type="text"
                 placeholder="Admin1234"
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-sm focus:border-[#5c0000] focus:outline-none focus:ring-2 focus:ring-[#5c0000]/40"
+                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-sm focus:border-[#7a0a0a] focus:outline-none focus:ring-2 focus:ring-[#7a0a0a]/40"
               />
             </div>
 
@@ -56,14 +50,14 @@ export default function LoginPage() {
                 name="password"
                 type="password"
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-sm focus:border-[#5c0000] focus:outline-none focus:ring-2 focus:ring-[#5c0000]/40"
+                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-sm focus:border-[#7a0a0a] focus:outline-none focus:ring-2 focus:ring-[#7a0a0a]/40"
               />
             </div>
 
             <div className="text-right text-sm">
               <Link
                 href="#"
-                className="text-[#5c0000] transition-colors hover:text-[#7a0a0a]"
+                className="text-[#7a0a0a] transition-colors hover:text-[#5c0000]"
               >
                 ลืมรหัสผ่าน?
               </Link>
@@ -71,7 +65,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="w-full rounded-xl bg-[#5c0000] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-[#5c0000]/30 transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#7a0a0a] focus:outline-none focus:ring-2 focus:ring-[#5c0000]/50"
+              className="w-full rounded-xl bg-[#7a0a0a] px-4 py-3 text-base font-semibold text-white shadow-lg shadow-[#7a0a0a]/30 transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#5c0000] focus:outline-none focus:ring-2 focus:ring-[#7a0a0a]/50"
             >
               เข้าสู่ระบบ
             </button>
