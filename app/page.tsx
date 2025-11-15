@@ -19,6 +19,9 @@ export default function LoginPage() {
             <h2 className="mt-4 text-4xl font-bold text-[#121212]">
               ยินดีต้อนรับ
             </h2>
+            <p className="text-sm text-[#7a0a0a] mt-2">
+              ใช้ชื่อผู้ใช้ <strong>Admin</strong> และรหัสผ่าน <strong>admin</strong> (ระบบยังไม่เชื่อมบัญชีจริง)
+            </p>
           </div>
 
           <form action="/dashboard" className="mt-8 space-y-6">
@@ -33,7 +36,7 @@ export default function LoginPage() {
                 id="username"
                 name="username"
                 type="text"
-                placeholder="Admin1234"
+                placeholder="Admin"
                 className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-sm focus:border-[#7a0a0a] focus:outline-none focus:ring-2 focus:ring-[#7a0a0a]/40"
               />
             </div>
@@ -49,7 +52,7 @@ export default function LoginPage() {
                 id="password"
                 name="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="admin"
                 className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-900 shadow-sm focus:border-[#7a0a0a] focus:outline-none focus:ring-2 focus:ring-[#7a0a0a]/40"
               />
             </div>

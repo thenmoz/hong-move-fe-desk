@@ -206,6 +206,7 @@ export async function createBooking(
     pickup_time: `${formData.travelDateTime}+07:00`, // Add timezone
     pickup_timezone: 'Asia/Bangkok',
     passenger_notes: formData.note,
+    source: formData.source,
   };
 
   return apiFetch<CreateBookingResponse>('/bookings', {

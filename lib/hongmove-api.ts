@@ -35,6 +35,7 @@ interface CreateBookingRequest {
   pickup_timezone?: string;
   flight_number?: string;
   passenger_notes?: string;
+  source?: string;
 }
 
 interface BookingResponse {
@@ -73,7 +74,8 @@ interface ListBookingsResponse {
  */
 export async function createBooking(
   data: CreateBookingRequest,
-  agentToken?: string
+  agentToken?: string,
+  source?: string
 ): Promise<ApiResponse<BookingResponse>> {
   try {
     const headers: HeadersInit = {
@@ -83,6 +85,10 @@ export async function createBooking(
     // Add Authorization header if token is provided
     if (agentToken) {
       headers['Authorization'] = `Bearer ${agentToken}`;
+    }
+
+    if (source) {
+      headers['X-Hongmove-Source'] = source;
     }
 
     const response = await fetch(`${HONGMOVE_API_BASE_URL}/bookings`, {
@@ -161,7 +167,7 @@ export async function listBookings(
     page?: number;
     limit?: number;
   },
-  agentToken: string
+  agentToken?: string
 ): Promise<ApiResponse<ListBookingsResponse>> {
   try {
     const queryParams = new URLSearchParams();
@@ -172,12 +178,17 @@ export async function listBookings(
 
     const url = `${HONGMOVE_API_BASE_URL}/bookings?${queryParams.toString()}`;
 
-    const response = await fetch(url, {
+    const requestInit: RequestInit = {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${agentToken}`,
-      },
-    });
+    };
+
+    if (agentToken) {
+      requestInit.headers = {
+        Authorization: `Bearer ${agentToken}`,
+      };
+    }
+
+    const response = await fetch(url, requestInit);
 
     const result = await response.json();
 

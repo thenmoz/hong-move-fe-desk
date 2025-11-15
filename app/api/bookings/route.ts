@@ -26,11 +26,9 @@ export async function POST(request: NextRequest) {
     // Transform frontend data to API format
     const apiData = mapFormToCreateBookingPayload(body as BookingFormData, body.timezone);
 
-    // Get agent token from environment (optional for customer bookings)
-    const agentToken = process.env.HONGMOVE_AGENT_TOKEN;
-
     // Call Hongmove API
-    const result = await createBooking(apiData, agentToken);
+    const sourceFromRequest = typeof body.source === 'string' ? body.source.trim() : '';
+    const result = await createBooking(apiData, undefined, sourceFromRequest || undefined);
 
     if (!result.success) {
       console.error('Hongmove API error:', result.error);
@@ -76,23 +74,9 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
 
-    // Get agent token from environment
-    const agentToken = process.env.HONGMOVE_AGENT_TOKEN;
-
-    if (!agentToken) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Agent token not configured'
-        },
-        { status: 500 }
-      );
-    }
-
     // Call Hongmove API
     const result = await listBookings(
       { date, status, page, limit },
-      agentToken
     );
 
     if (!result.success) {

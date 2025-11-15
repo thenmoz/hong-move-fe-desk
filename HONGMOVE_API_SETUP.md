@@ -20,21 +20,13 @@ cp .env.example .env.local
 
 ```env
 NEXT_PUBLIC_HONGMOVE_API_URL=https://hongmove-api-staging.up.railway.app
-HONGMOVE_AGENT_TOKEN=<your-agent-token>
 ```
 
 **หมายเหตุ**:
-- `HONGMOVE_AGENT_TOKEN` จำเป็นสำหรับการ list/manage bookings
-- สำหรับ customer bookings (หน้า `/book`) สามารถใช้งานได้โดยไม่ต้องมี token (ถ้า API อนุญาต)
+- ระบบไม่ต้องการ `HONGMOVE_AGENT_TOKEN` อีกต่อไป (คำขอจองจะส่งข้อมูล source มาแทน)
+- ฟิลด์ `source` จะถูกส่งมาพร้อมกับคำขอเพื่อให้ระบบรู้ว่า request มาจากแหล่งใด
 
-### 2. รับ Agent Token
-
-ติดต่อ Hongmove API administrator เพื่อขอ:
-- Agent Token สำหรับ staff/admin operations
-- (Optional) Driver Token สำหรับ trip operations
-- (Optional) POS API Key สำหรับ meter operations
-
-### 3. ทดสอบการเชื่อมต่อ
+### 2. ทดสอบการเชื่อมต่อ
 
 ```bash
 # ทดสอบ API connection
@@ -44,11 +36,10 @@ curl https://hongmove-api-staging.up.railway.app
 # {"success":true,"data":"Hello World!"}
 ```
 
-### 4. ทดสอบ Create Booking (ต้องมี token)
+### 3. ทดสอบ Create Booking
 
 ```bash
 curl -X POST https://hongmove-api-staging.up.railway.app/bookings \
-  -H "Authorization: Bearer YOUR_AGENT_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
     "passenger_name": "John Doe",
@@ -57,7 +48,8 @@ curl -X POST https://hongmove-api-staging.up.railway.app/bookings \
     "pickup_location": "Suvarnabhumi Airport",
     "dropoff_location": "Sukhumvit Soi 11",
     "pickup_time": "2025-11-15T14:30:00+07:00",
-    "pickup_timezone": "Asia/Bangkok"
+    "pickup_timezone": "Asia/Bangkok",
+    "source": "webflow-embed"
   }'
 ```
 
@@ -66,7 +58,7 @@ curl -X POST https://hongmove-api-staging.up.railway.app/bookings \
 ### Bookings
 
 - `POST /bookings` - สร้าง booking ใหม่
-- `GET /bookings` - ดึงรายการ bookings (ต้องมี token)
+- `GET /bookings` - ดึงรายการ bookings (ไม่ต้องมี token สำหรับ frontdesk proxy)
 - `GET /bookings/:id` - ดูรายละเอียด booking (ต้องมี token)
 - `PATCH /bookings/:id` - แก้ไข booking (ต้องมี token)
 - `DELETE /bookings/:id` - ยกเลิก booking (ต้องมี token)
@@ -107,8 +99,9 @@ app/
   phone → passenger_phone
   pickupLocation → pickup_location
   dropoffLocation → dropoff_location
-  travelDateTime → pickup_time
-  note → passenger_notes
+travelDateTime → pickup_time
+note → passenger_notes
+source → source
 }
 ```
 

@@ -18,6 +18,7 @@ export const mapFormToCreateBookingPayload = (
   pickup_time: data.travelDateTime,
   pickup_timezone: timezone || DEFAULT_TIMEZONE,
   passenger_notes: data.note || '',
+  source: data.source?.trim() || undefined,
 });
 
 /**

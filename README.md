@@ -154,6 +154,8 @@ frontdesk-app/
 
 ## Notes
 
+- หน้า login ใช้ User: `Admin` / Password: `admin` (ระบบยังไม่เชื่อมบัญชีจริง)
+- หน้า `/book` สามารถเปิดได้โดยไม่ต้องล็อกอิน และจะมีหน้าจอให้ระบุแหล่งที่มา (`source`) ก่อนเริ่มฟอร์ม
 - ปัจจุบันใช้ mock data สำหรับ development
 - UI/UX สามารถปรับแต่งสีและ styling ได้ตามต้องการ
 - Component ทั้งหมดสร้างด้วย TypeScript และ responsive design

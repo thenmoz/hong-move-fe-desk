@@ -123,6 +123,7 @@ export interface CreateBookingRequest {
   pickup_timezone: string; // e.g., "Asia/Bangkok"
   flight_number?: string;
   passenger_notes?: string;
+  source?: string; // Optional origin tag (e.g., webflow embed)
 }
 
 /**

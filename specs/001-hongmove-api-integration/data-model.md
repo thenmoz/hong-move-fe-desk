@@ -110,6 +110,7 @@ cancelled (from any state except completed)
 | `dropoffLocation` | string | Yes | Dropoff address |
 | `travelDateTime` | string | Yes | Pickup date/time (ISO 8601) |
 | `note` | string | No | Additional notes |
+| `source` | string | No | แหล่งที่มาของคำขอ (ชื่อหน้า/embed) สำหรับจัดกลุ่ม |
 
 **Validation** (Client-Side):
 - All required fields must be non-empty

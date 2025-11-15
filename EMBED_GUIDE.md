@@ -2,6 +2,8 @@
 
 ## วิธีการ Embed ใน Webflow
 
+เมื่อผู้ใช้เข้าถึง `/book` จะเห็นหน้าจอแรกให้เลือกหรือระบุ `source` เพื่อระบุแหล่งที่มาของคำขอ (หรือส่ง query parameter `?source=your-label` เพื่อข้ามขั้นตอนนี้) โดยหน้านี้สามารถเปิดได้โดยไม่ต้องล็อกอินจึงเหมาะสำหรับการ embed บนเว็บอื่น
+
 ### Option 1: ใช้ iframe (แนะนำ)
 
 เพิ่ม **Embed Element** ใน Webflow แล้ววาง code นี้:
@@ -93,6 +95,8 @@
 ## Features
 
 - ✅ Responsive design (Desktop, Tablet, Mobile)
+- ✅ หน้าเลือกรับแหล่งที่มา (`source`) พร้อมรองรับ query parameter `?source=<label>`
+- ✅ หน้า booking ใช้งานได้เลยโดยไม่ต้องล็อกอิน (เหมาะสำหรับ embed)
 - ✅ Form validation
 - ✅ หน้ายืนยันการจอง
 - ✅ สร้าง booking number อัตโนมัติ
