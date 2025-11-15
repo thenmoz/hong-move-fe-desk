@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Search, Eye, Calendar } from "lucide-react";
-import { mockBookings } from "@/data/mockBookings";
 import { Booking } from "@/types/booking";
 import { format } from "date-fns";
 import { th } from "date-fns/locale";
@@ -12,7 +11,35 @@ export default function ManageBookingPage() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
-  const [bookings] = useState<Booking[]>(mockBookings);
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
+  const fetchBookings = useCallback(async () => {
+    setIsLoading(true);
+    setFetchError(null);
+    try {
+      const response = await fetch("/api/bookings");
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "ไม่สามารถโหลดข้อมูลการจอง");
+      }
+
+      setBookings(data.data?.bookings || []);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "ไม่สามารถโหลดข้อมูลการจอง";
+      setFetchError(message);
+      setBookings([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBookings();
+  }, [fetchBookings]);
 
   // Calculate statistics
   const stats = {
@@ -150,109 +177,132 @@ export default function ManageBookingPage() {
           </div>
         </div>
 
+        {fetchError && (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p>{fetchError}</p>
+              <button
+                onClick={fetchBookings}
+                className="font-medium text-red-800 underline-offset-2 hover:underline"
+              >
+                ลองอีกครั้ง
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Table */}
         <div className="overflow-hidden rounded-lg bg-white shadow">
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-[#8b0000] text-white">
-                <tr>
-                  <th className="px-4 py-3 text-center text-xs font-medium">ลำดับ</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">
-                    หมายเลข Booking
-                  </th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">ชื่อผู้โดยสาร</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">เบอร์โทรศัพท์</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">อีเมล</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">ปลายทาง</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">วันเดินทาง</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">เวลาเดินทาง</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">สถานะ</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">ค่าโดยสาร</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium">ดูข้อมูล</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
-                {filteredBookings.map((booking, index) => (
-                  <tr key={booking.id} className={`${index % 2 === 0 ? 'bg-white' : 'bg-red-50'} hover:bg-red-100`}>
-                    <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
-                      {index + 1}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
-                      {booking.bookingNumber}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
-                      {booking.passengerName}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
-                      {booking.phone}
-                    </td>
-                    <td className="px-4 py-3 text-center text-sm text-gray-900">
-                      <div className="max-w-[150px] truncate" title={booking.email}>
-                        {booking.email}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-center text-sm text-gray-900">
-                      <div className="max-w-[120px] truncate" title={booking.dropoffLocation}>
-                        {booking.dropoffLocation}
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
-                      {formatDateTime(booking.travelDateTime)}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
-                      {format(new Date(booking.travelDateTime), "HH:mm")}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-center text-sm">
-                      <span className={`font-medium ${getStatusColor(booking.jobStatus)}`}>
-                        {getStatusLabel(booking.jobStatus)}
-                      </span>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
-                      {booking.finalMeterPrice
-                        ? `${booking.finalMeterPrice.toLocaleString()}.00`
-                        : "-"}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-center">
-                      <button
-                        onClick={() => {
-                          window.location.href = `/booking/${booking.id}`;
-                        }}
-                        className="inline-flex items-center justify-center rounded-full bg-green-600 p-2 text-white transition-colors hover:bg-green-700"
-                        title="ดูรายละเอียด"
+          {isLoading ? (
+            <div className="py-12 text-center text-gray-500">กำลังโหลดข้อมูลการจอง...</div>
+          ) : (
+            <>
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-[#8b0000] text-white">
+                    <tr>
+                      <th className="px-4 py-3 text-center text-xs font-medium">ลำดับ</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">
+                        หมายเลข Booking
+                      </th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">ชื่อผู้โดยสาร</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">เบอร์โทรศัพท์</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">อีเมล</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">ปลายทาง</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">วันเดินทาง</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">เวลาเดินทาง</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">สถานะ</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">ค่าโดยสาร</th>
+                      <th className="px-4 py-3 text-center text-xs font-medium">ดูข้อมูล</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 bg-white">
+                    {filteredBookings.map((booking, index) => (
+                      <tr
+                        key={booking.id}
+                        className={`${index % 2 === 0 ? 'bg-white' : 'bg-red-50'} hover:bg-red-100`}
                       >
-                        <Eye className="h-4 w-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination */}
-          {filteredBookings.length > 0 && (
-            <div className="flex items-center justify-between border-t border-gray-200 bg-white px-6 py-4">
-              <div className="text-sm text-gray-600">
-                ทั้งหมด {filteredBookings.length} รายการ
+                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
+                          {index + 1}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
+                          {booking.bookingNumber}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
+                          {booking.passengerName}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
+                          {booking.phone}
+                        </td>
+                        <td className="px-4 py-3 text-center text-sm text-gray-900">
+                          <div className="max-w-[150px] truncate" title={booking.email}>
+                            {booking.email}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-center text-sm text-gray-900">
+                          <div className="max-w-[120px] truncate" title={booking.dropoffLocation}>
+                            {booking.dropoffLocation}
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
+                          {formatDateTime(booking.travelDateTime)}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
+                          {format(new Date(booking.travelDateTime), "HH:mm")}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm">
+                          <span className={`font-medium ${getStatusColor(booking.jobStatus)}`}>
+                            {getStatusLabel(booking.jobStatus)}
+                          </span>
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
+                          {booking.finalMeterPrice
+                            ? `${booking.finalMeterPrice.toLocaleString()}.00`
+                            : "-"}
+                        </td>
+                        <td className="whitespace-nowrap px-4 py-3 text-center">
+                          <button
+                            onClick={() => {
+                              window.location.href = `/booking/${booking.id}`;
+                            }}
+                            className="inline-flex items-center justify-center rounded-full bg-green-600 p-2 text-white transition-colors hover:bg-green-700"
+                            title="ดูรายละเอียด"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-              <div className="flex gap-2">
-                <button className="rounded bg-[#8b0000] px-4 py-2 text-sm text-white">
-                  1
-                </button>
-                <button className="rounded bg-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-300">
-                  2
-                </button>
-                <button className="rounded bg-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-300">
-                  ต่อไป
-                </button>
-              </div>
-            </div>
-          )}
 
-          {filteredBookings.length === 0 && (
-            <div className="py-12 text-center text-gray-500">
-              ไม่พบข้อมูลที่ค้นหา
-            </div>
+              {/* Pagination */}
+              {filteredBookings.length > 0 && (
+                <div className="flex items-center justify-between border-t border-gray-200 bg-white px-6 py-4">
+                  <div className="text-sm text-gray-600">
+                    ทั้งหมด {filteredBookings.length} รายการ
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="rounded bg-[#8b0000] px-4 py-2 text-sm text-white">
+                      1
+                    </button>
+                    <button className="rounded bg-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-300">
+                      2
+                    </button>
+                    <button className="rounded bg-gray-200 px-4 py-2 text-sm text-gray-700 hover:bg-gray-300">
+                      ต่อไป
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {filteredBookings.length === 0 && !fetchError && (
+                <div className="py-12 text-center text-gray-500">
+                  ไม่พบข้อมูลที่ค้นหา
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

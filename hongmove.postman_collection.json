@@ -264,10 +264,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{driverToken}}"
-              },
-              {
                 "key": "X-API-Key",
                 "value": "{{posApiKey}}"
               },
@@ -282,7 +278,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"driver_id\": \"{{driverId}}\",\n  \"vehicle_plate\": \"ABC-1234\",\n  \"device_id\": \"{{deviceId}}\",\n  \"booking_number\": \"{{bookingNumber}}\",\n  \"start_location\": {\n    \"lat\": 13.7563,\n    \"lng\": 100.5018,\n    \"accuracy\": 5.2,\n    \"timestamp\": \"2025-11-06T14:30:00Z\",\n    \"provider\": \"mappointasia\"\n  },\n  \"meter_start\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceId}}\",\n    \"timestamp\": \"2025-11-06T14:30:00Z\",\n    \"initial_reading\": 0\n  }\n}"
+              "raw": "{\n  \"vehicle_plate\": \"ABC-1234\",\n  \"device_id\": \"{{deviceId}}\",\n  \"unit_id\": \"{{deviceId}}\",\n  \"booking_number\": \"{{bookingNumber}}\",\n  \"meter_start\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceId}}\",\n    \"timestamp\": \"2025-11-06T14:30:00Z\",\n    \"initial_reading\": 0\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/trips/start",
@@ -322,10 +318,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{driverToken}}"
-              },
-              {
                 "key": "X-API-Key",
                 "value": "{{posApiKey}}"
               },
@@ -340,7 +332,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"device_id\": \"{{deviceId}}\",\n  \"booking_number\": \"{{bookingNumber}}\",\n  \"stop_location\": {\n    \"lat\": 13.7563,\n    \"lng\": 100.4918,\n    \"accuracy\": 4.8,\n    \"timestamp\": \"2025-11-06T15:10:00Z\",\n    \"provider\": \"thaistar\"\n  },\n  \"meter_end\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceId}}\",\n    \"timestamp\": \"2025-11-06T15:10:00Z\",\n    \"final_reading\": 23.5,\n    \"trip_summary\": {\n      \"distance_km\": 18.2,\n      \"duration_minutes\": 40,\n      \"fare\": {\n        \"base_fare\": 35,\n        \"distance_fare\": 150,\n        \"time_fare\": 45,\n        \"surcharge\": 20,\n        \"total_fare\": 250,\n        \"currency\": \"THB\"\n      }\n    }\n  }\n}"
+              "raw": "{\n  \"device_id\": \"{{deviceId}}\",\n  \"unit_id\": \"{{deviceId}}\",\n  \"booking_number\": \"{{bookingNumber}}\",\n  \"meter_end\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceId}}\",\n    \"timestamp\": \"2025-11-06T15:10:00Z\",\n    \"final_reading\": 23.5,\n    \"trip_summary\": {\n      \"distance_km\": 18.2,\n      \"duration_minutes\": 40,\n      \"fare\": {\n        \"base_fare\": 35,\n        \"distance_fare\": 150,\n        \"time_fare\": 45,\n        \"surcharge\": 20,\n        \"total_fare\": 250,\n        \"currency\": \"THB\"\n      }\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/trips/{{tripId}}/stop",
@@ -381,10 +373,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{driverToken}}"
-              },
-              {
                 "key": "X-API-Key",
                 "value": "{{posApiKey}}"
               },
@@ -399,7 +387,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"device_id\": \"{{deviceMismatchId}}\",\n  \"booking_number\": \"{{bookingNumber}}\",\n  \"stop_location\": {\n    \"lat\": 13.7500,\n    \"lng\": 100.4800,\n    \"accuracy\": 5,\n    \"timestamp\": \"2025-11-06T15:12:00Z\",\n    \"provider\": \"mappointasia\"\n  },\n  \"meter_end\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceMismatchId}}\",\n    \"timestamp\": \"2025-11-06T15:12:00Z\",\n    \"final_reading\": 10.5,\n    \"trip_summary\": {\n      \"distance_km\": 10.5,\n      \"duration_minutes\": 30,\n      \"fare\": {\n        \"base_fare\": 35,\n        \"distance_fare\": 120,\n        \"time_fare\": 30,\n        \"surcharge\": 0,\n        \"total_fare\": 185,\n        \"currency\": \"THB\"\n      }\n    }\n  }\n}"
+              "raw": "{\n  \"device_id\": \"{{deviceMismatchId}}\",\n  \"unit_id\": \"{{deviceMismatchId}}\",\n  \"booking_number\": \"{{bookingNumber}}\",\n  \"meter_end\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceMismatchId}}\",\n    \"timestamp\": \"2025-11-06T15:12:00Z\",\n    \"final_reading\": 10.5,\n    \"trip_summary\": {\n      \"distance_km\": 10.5,\n      \"duration_minutes\": 30,\n      \"fare\": {\n        \"base_fare\": 35,\n        \"distance_fare\": 120,\n        \"time_fare\": 30,\n        \"surcharge\": 0,\n        \"total_fare\": 185,\n        \"currency\": \"THB\"\n      }\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/trips/{{tripId}}/stop",
@@ -435,10 +423,6 @@
             "method": "POST",
             "header": [
               {
-                "key": "Authorization",
-                "value": "Bearer {{driverToken}}"
-              },
-              {
                 "key": "X-API-Key",
                 "value": "{{posApiKey}}"
               },
@@ -453,7 +437,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"device_id\": \"{{deviceId}}\",\n  \"stop_location\": {\n    \"lat\": 13.7200,\n    \"lng\": 100.5200,\n    \"accuracy\": 4.6,\n    \"timestamp\": \"2025-11-06T15:20:00Z\",\n    \"provider\": \"mappointasia\"\n  },\n  \"meter_end\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceId}}\",\n    \"timestamp\": \"2025-11-06T15:20:00Z\",\n    \"final_reading\": 14.5,\n    \"trip_summary\": {\n      \"distance_km\": 14.5,\n      \"duration_minutes\": 38,\n      \"fare\": {\n        \"base_fare\": 35,\n        \"distance_fare\": 170,\n        \"time_fare\": 40,\n        \"surcharge\": 10,\n        \"total_fare\": 255,\n        \"currency\": \"THB\"\n      }\n    }\n  }\n}"
+              "raw": "{\n  \"device_id\": \"{{deviceId}}\",\n  \"unit_id\": \"{{deviceId}}\",\n  \"meter_end\": {\n    \"meter_id\": \"METER-789\",\n    \"device_id\": \"{{deviceId}}\",\n    \"timestamp\": \"2025-11-06T15:20:00Z\",\n    \"final_reading\": 14.5,\n    \"trip_summary\": {\n      \"distance_km\": 14.5,\n      \"duration_minutes\": 38,\n      \"fare\": {\n        \"base_fare\": 35,\n        \"distance_fare\": 170,\n        \"time_fare\": 40,\n        \"surcharge\": 10,\n        \"total_fare\": 255,\n        \"currency\": \"THB\"\n      }\n    }\n  }\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/trips/{{missingTripId}}/stop",
@@ -492,12 +476,7 @@
           "name": "Poll Payment",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{driverToken}}"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/payments/{{paymentId}}",
               "host": [
@@ -667,10 +646,6 @@
       "value": "<staff-token>"
     },
     {
-      "key": "driverToken",
-      "value": "<driver-token>"
-    },
-    {
       "key": "posApiKey",
       "value": "<pos-api-key>"
     },
@@ -681,10 +656,6 @@
     {
       "key": "deviceMismatchId",
       "value": "POS-002"
-    },
-    {
-      "key": "driverId",
-      "value": "00000000-0000-0000-0000-000000000000"
     },
     {
       "key": "bookingId",

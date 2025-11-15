@@ -61,8 +61,12 @@ export default function NewBookingPage() {
 
       // Success - redirect to bookings list
       router.push('/dashboard/bookings');
-    } catch (err: any) {
-      setError(err.message || 'เกิดข้อผิดพลาดในการสร้าง booking กรุณาลองใหม่อีกครั้ง');
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'เกิดข้อผิดพลาดในการสร้าง booking กรุณาลองใหม่อีกครั้ง';
+      setError(message);
     } finally {
       setIsSubmitting(false);
     }

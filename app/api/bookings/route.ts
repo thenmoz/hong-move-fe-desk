@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createBooking, listBookings } from '@/lib/hongmove-api';
+import { createBooking, listBookings, BookingResponse } from '@/lib/hongmove-api';
+import {
+  mapApiBookingToBooking,
+  mapApiBookingsToBookingList,
+  mapFormToCreateBookingPayload,
+} from '@/lib/utils/bookingTransformers';
+import type { BookingFormData } from '@/types/booking';
 
 // POST - สร้าง booking ใหม่ผ่าน Hongmove API
 export async function POST(request: NextRequest) {
@@ -18,16 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Transform frontend data to API format
-    const apiData = {
-      passenger_name: body.passengerName,
-      passenger_email: body.email,
-      passenger_phone: body.phone,
-      pickup_location: body.pickupLocation,
-      dropoff_location: body.dropoffLocation,
-      pickup_time: body.travelDateTime, // Should be ISO 8601 format
-      pickup_timezone: body.timezone || 'Asia/Bangkok',
-      passenger_notes: body.note || '',
-    };
+    const apiData = mapFormToCreateBookingPayload(body as BookingFormData, body.timezone);
 
     // Get agent token from environment (optional for customer bookings)
     const agentToken = process.env.HONGMOVE_AGENT_TOKEN;
@@ -47,21 +44,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Transform API response back to frontend format
-    const booking = result.data;
-    const responseData = {
-      id: booking?.booking_id,
-      bookingNumber: booking?.booking_number,
-      passengerName: booking?.passenger_name,
-      phone: booking?.passenger_phone,
-      email: booking?.passenger_email,
-      pickupLocation: booking?.pickup_location,
-      dropoffLocation: booking?.dropoff_location,
-      travelDateTime: booking?.pickup_time,
-      note: booking?.passenger_notes,
-      status: booking?.status,
-      createdAt: booking?.created_at,
-      updatedAt: booking?.updated_at,
-    };
+    const bookingPayload = (result.data?.booking ?? result.data) as BookingResponse;
+    const responseData = mapApiBookingToBooking(bookingPayload);
 
     return NextResponse.json(
       {
@@ -122,9 +106,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const apiData = result.data;
+    const bookings = mapApiBookingsToBookingList(apiData?.bookings || []);
+
     return NextResponse.json({
       success: true,
-      data: result.data
+      data: {
+        bookings,
+        pagination: apiData?.pagination,
+      }
     });
   } catch (error) {
     console.error('Error fetching bookings:', error);

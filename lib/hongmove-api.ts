@@ -1,3 +1,5 @@
+import { JobStatus, PaymentStatus } from '@/types/booking';
+
 /**
  * Hongmove API Client
  *
@@ -5,7 +7,11 @@
  * Documentation: Based on hongmove.postman_collection.json
  */
 
-const HONGMOVE_API_BASE_URL = process.env.NEXT_PUBLIC_HONGMOVE_API_URL || 'https://hongmove-api-staging.up.railway.app';
+const HONGMOVE_API_BASE_URL =
+  process.env.NEXT_PUBLIC_HONGMOVE_API_URL || 'https://hongmove-api-staging.up.railway.app';
+
+const getErrorMessage = (error: unknown, fallback: string) =>
+  error instanceof Error ? error.message : fallback;
 
 // Response envelope type
 interface ApiResponse<T> {
@@ -14,7 +20,7 @@ interface ApiResponse<T> {
   error?: {
     code: string;
     message: string;
-    details?: any;
+    details?: unknown;
   };
 }
 
@@ -27,11 +33,13 @@ interface CreateBookingRequest {
   dropoff_location: string;
   pickup_time: string; // ISO 8601 format
   pickup_timezone?: string;
+  flight_number?: string;
   passenger_notes?: string;
 }
 
 interface BookingResponse {
-  booking_id: string;
+  id?: string;
+  booking_id?: string;
   booking_number: string;
   passenger_name: string;
   passenger_email: string;
@@ -41,7 +49,11 @@ interface BookingResponse {
   pickup_time: string;
   pickup_timezone: string;
   passenger_notes?: string;
-  status: string;
+  status?: JobStatus | string;
+  payment_status?: PaymentStatus | string;
+  final_meter_price?: number;
+  omise_charge_id?: string;
+  email_sent_at?: string;
   created_at: string;
   updated_at: string;
 }
@@ -92,12 +104,12 @@ export async function createBooking(
     }
 
     return result;
-  } catch (error: any) {
+  } catch (error) {
     return {
       success: false,
       error: {
         code: 'NETWORK_ERROR',
-        message: error.message || 'Failed to connect to Hongmove API',
+        message: getErrorMessage(error, 'Failed to connect to Hongmove API'),
       },
     };
   }
@@ -128,12 +140,12 @@ export async function getBooking(
     }
 
     return result;
-  } catch (error: any) {
+  } catch (error) {
     return {
       success: false,
       error: {
         code: 'NETWORK_ERROR',
-        message: error.message || 'Failed to fetch booking',
+        message: getErrorMessage(error, 'Failed to fetch booking'),
       },
     };
   }
@@ -177,12 +189,12 @@ export async function listBookings(
     }
 
     return result;
-  } catch (error: any) {
+  } catch (error) {
     return {
       success: false,
       error: {
         code: 'NETWORK_ERROR',
-        message: error.message || 'Failed to fetch bookings',
+        message: getErrorMessage(error, 'Failed to fetch bookings'),
       },
     };
   }
@@ -216,12 +228,12 @@ export async function updateBooking(
     }
 
     return result;
-  } catch (error: any) {
+  } catch (error) {
     return {
       success: false,
       error: {
         code: 'NETWORK_ERROR',
-        message: error.message || 'Failed to update booking',
+        message: getErrorMessage(error, 'Failed to update booking'),
       },
     };
   }
@@ -255,12 +267,12 @@ export async function cancelBooking(
     }
 
     return result;
-  } catch (error: any) {
+  } catch (error) {
     return {
       success: false,
       error: {
         code: 'NETWORK_ERROR',
-        message: error.message || 'Failed to cancel booking',
+        message: getErrorMessage(error, 'Failed to cancel booking'),
       },
     };
   }
@@ -291,12 +303,12 @@ export async function resendBookingEmail(
     }
 
     return result;
-  } catch (error: any) {
+  } catch (error) {
     return {
       success: false,
       error: {
         code: 'NETWORK_ERROR',
-        message: error.message || 'Failed to resend email',
+        message: getErrorMessage(error, 'Failed to resend email'),
       },
     };
   }

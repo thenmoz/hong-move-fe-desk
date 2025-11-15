@@ -61,8 +61,12 @@ export default function CustomerBookingPage() {
       setBookingSuccess(true);
 
       // TODO: ส่งอีเมลยืนยัน
-    } catch (err: any) {
-      setError(err.message || 'เกิดข้อผิดพลาดในการจอง กรุณาลองใหม่อีกครั้ง');
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : 'เกิดข้อผิดพลาดในการจอง กรุณาลองใหม่อีกครั้ง';
+      setError(message);
     } finally {
       setIsSubmitting(false);
     }
