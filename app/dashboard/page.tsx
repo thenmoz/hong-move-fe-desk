@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   ClipboardPlus,
@@ -8,50 +10,93 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import { useEffect, useState } from "react";
+import { Booking } from "@/types/booking";
 
 const quickActions = [
   { label: "สร้างหมายเลขบุ๊คกิ้ง", href: "/create-booking" },
 ];
 
-const overviewStats = [
-  {
-    label: "ค่าจำนวนบุ๊กกิ้งรับแล้ว",
-    value: "120",
-    icon: ClipboardPlus,
-  },
-  {
-    label: "รอเรื่องดูบ้านหมายนี้",
-    value: "199",
-    icon: Clock3,
-  },
-  {
-    label: "รายได้รวม (บาท)",
-    value: "5,000",
-    icon: DollarSign,
-  },
-  {
-    label: "รอดำเนินการ",
-    value: "20",
-    icon: Clock3,
-  },
-  {
-    label: "ทำสัญญาครม",
-    value: "1",
-    icon: ShieldCheck,
-  },
-  {
-    label: "เสร็จสิ้น",
-    value: "9",
-    icon: ShieldCheck,
-  },
-  {
-    label: "ยกเลิก",
-    value: "1",
-    icon: MapPin,
-  },
-];
-
 export default function DashboardPage() {
+  const [stats, setStats] = useState({
+    pending: 0,
+    confirmed: 0,
+    inProgress: 0,
+    completed: 0,
+    cancelled: 0,
+    totalRevenue: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch("/api/bookings?limit=100"); // Fetch enough to calculate stats
+        const data = await response.json();
+
+        if (data.success && data.data?.bookings) {
+          const bookings: Booking[] = data.data.bookings;
+
+          const newStats = {
+            pending: bookings.filter((b) => b.jobStatus === "pending").length,
+            confirmed: bookings.filter((b) => b.jobStatus === "confirmed").length,
+            inProgress: bookings.filter((b) => b.jobStatus === "in_progress").length,
+            completed: bookings.filter((b) => b.jobStatus === "completed").length,
+            cancelled: bookings.filter((b) => b.jobStatus === "cancelled").length,
+            totalRevenue: bookings
+              .filter((b) => b.paymentStatus === "paid" && b.finalMeterPrice)
+              .reduce((sum, b) => sum + (b.finalMeterPrice || 0), 0),
+          };
+          setStats(newStats);
+        }
+      } catch (error) {
+        console.error("Failed to fetch dashboard stats:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const overviewStats = [
+    {
+      label: "ค่าจำนวนบุ๊กกิ้งรับแล้ว",
+      value: stats.confirmed.toString(),
+      icon: ClipboardPlus,
+    },
+    {
+      label: "รอเรื่องดูบ้านหมายนี้", // Assuming this maps to pending for now, or maybe another status?
+      value: stats.pending.toString(),
+      icon: Clock3,
+    },
+    {
+      label: "รายได้รวม (บาท)",
+      value: stats.totalRevenue.toLocaleString(),
+      icon: DollarSign,
+    },
+    {
+      label: "รอดำเนินการ",
+      value: stats.pending.toString(),
+      icon: Clock3,
+    },
+    {
+      label: "กำลังเดินทาง",
+      value: stats.inProgress.toString(),
+      icon: ShieldCheck,
+    },
+    {
+      label: "เสร็จสิ้น",
+      value: stats.completed.toString(),
+      icon: ShieldCheck,
+    },
+    {
+      label: "ยกเลิก",
+      value: stats.cancelled.toString(),
+      icon: MapPin,
+    },
+  ];
+
   return (
     <DashboardLayout>
       <header className="flex flex-wrap items-start justify-between gap-6">
@@ -85,7 +130,7 @@ export default function DashboardPage() {
                 {stat.label}
               </p>
               <p className="mt-3 text-4xl font-bold text-slate-800">
-                {stat.value}
+                {isLoading ? "-" : stat.value}
               </p>
             </div>
           ))}

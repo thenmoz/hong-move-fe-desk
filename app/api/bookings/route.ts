@@ -42,13 +42,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Transform API response back to frontend format
-    const bookingPayload = (result.data?.booking ?? result.data) as BookingResponse;
-    const responseData = mapApiBookingToBooking(bookingPayload);
+    // API may return booking directly or nested under a 'booking' key
+    const responseData = result.data as BookingResponse;
+    const bookingPayload = (responseData as unknown as { booking?: BookingResponse })?.booking ?? responseData;
+    const transformedData = mapApiBookingToBooking(bookingPayload);
 
     return NextResponse.json(
       {
         success: true,
-        booking: responseData,
+        booking: transformedData,
         message: 'Booking created successfully'
       },
       { status: 201 }
