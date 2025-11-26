@@ -1,11 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createBooking, listBookings, BookingResponse } from '@/lib/hongmove-api';
+import { NextRequest, NextResponse } from "next/server";
+import {
+  createBooking,
+  listBookings,
+  BookingResponse,
+} from "@/lib/hongmove-api";
 import {
   mapApiBookingToBooking,
   mapApiBookingsToBookingList,
   mapFormToCreateBookingPayload,
-} from '@/lib/utils/bookingTransformers';
-import type { BookingFormData } from '@/types/booking';
+} from "@/lib/utils/bookingTransformers";
+import type { BookingFormData } from "@/types/booking";
 
 // POST - สร้าง booking ใหม่ผ่าน Hongmove API
 export async function POST(request: NextRequest) {
@@ -13,7 +17,14 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validate required fields
-    const requiredFields = ['passengerName', 'phone', 'email', 'pickupLocation', 'dropoffLocation', 'travelDateTime'];
+    const requiredFields = [
+      "passengerName",
+      "phone",
+      "email",
+      "pickupLocation",
+      "dropoffLocation",
+      "travelDateTime",
+    ];
     for (const field of requiredFields) {
       if (!body[field]) {
         return NextResponse.json(
@@ -24,18 +35,26 @@ export async function POST(request: NextRequest) {
     }
 
     // Transform frontend data to API format
-    const apiData = mapFormToCreateBookingPayload(body as BookingFormData, body.timezone);
+    const apiData = mapFormToCreateBookingPayload(
+      body as BookingFormData,
+      body.timezone
+    );
 
     // Call Hongmove API
-    const sourceFromRequest = typeof body.source === 'string' ? body.source.trim() : '';
-    const result = await createBooking(apiData, undefined, sourceFromRequest || undefined);
+    const sourceFromRequest =
+      typeof body.source === "string" ? body.source.trim() : "";
+    const result = await createBooking(
+      apiData,
+      undefined,
+      sourceFromRequest || undefined
+    );
 
     if (!result.success) {
-      console.error('Hongmove API error:', result.error);
+      console.error("Hongmove API error:", result.error);
       return NextResponse.json(
         {
           success: false,
-          error: result.error?.message || 'Failed to create booking'
+          error: result.error?.message || "Failed to create booking",
         },
         { status: 400 }
       );
@@ -44,23 +63,25 @@ export async function POST(request: NextRequest) {
     // Transform API response back to frontend format
     // API may return booking directly or nested under a 'booking' key
     const responseData = result.data as BookingResponse;
-    const bookingPayload = (responseData as unknown as { booking?: BookingResponse })?.booking ?? responseData;
+    const bookingPayload =
+      (responseData as unknown as { booking?: BookingResponse })?.booking ??
+      responseData;
     const transformedData = mapApiBookingToBooking(bookingPayload);
 
     return NextResponse.json(
       {
         success: true,
         booking: transformedData,
-        message: 'Booking created successfully'
+        message: "Booking created successfully",
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error creating booking:', error);
+    console.error("Error creating booking:", error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error'
+        error: "Internal server error",
       },
       { status: 500 }
     );
@@ -71,22 +92,20 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const date = searchParams.get('date') || undefined;
-    const status = searchParams.get('status') || undefined;
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const date = searchParams.get("date") || undefined;
+    const status = searchParams.get("status") || undefined;
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "20");
 
     // Call Hongmove API
-    const result = await listBookings(
-      { date, status, page, limit },
-    );
+    const result = await listBookings({ date, status, page, limit });
 
     if (!result.success) {
-      console.error('Hongmove API error:', result.error);
+      console.error("Hongmove API error:", result.error);
       return NextResponse.json(
         {
           success: false,
-          error: result.error?.message || 'Failed to fetch bookings'
+          error: result.error?.message || "Failed to fetch bookings",
         },
         { status: 400 }
       );
@@ -100,14 +119,14 @@ export async function GET(request: NextRequest) {
       data: {
         bookings,
         pagination: apiData?.pagination,
-      }
+      },
     });
   } catch (error) {
-    console.error('Error fetching bookings:', error);
+    console.error("Error fetching bookings:", error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Internal server error'
+        error: "Internal server error",
       },
       { status: 500 }
     );
