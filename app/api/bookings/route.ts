@@ -91,6 +91,18 @@ export async function POST(request: NextRequest) {
 // GET - ดึงรายการ bookings จาก Hongmove API
 export async function GET(request: NextRequest) {
   try {
+    const adminToken = process.env.ADMIN_API_KEY;
+
+    if (!adminToken) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Admin API key is required",
+        },
+        { status: 500 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const date = searchParams.get("date") || undefined;
     const status = searchParams.get("status") || undefined;
@@ -98,7 +110,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "20");
 
     // Call Hongmove API
-    const result = await listBookings({ date, status, page, limit });
+    const result = await listBookings({ date, status, page, limit }, adminToken);
 
     if (!result.success) {
       console.error("Hongmove API error:", result.error);

@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getBooking, updateBooking, cancelBooking, BookingResponse } from '@/lib/hongmove-api';
 import { mapApiBookingToBooking } from '@/lib/utils/bookingTransformers';
 
-// Helper to get agent token (mock or env)
-const getAgentToken = () => process.env.HONGMOVE_AGENT_TOKEN || 'mock-token';
+// Helper to get admin token
+const getAdminToken = () => process.env.ADMIN_API_KEY;
 
 export async function GET(
     request: NextRequest,
@@ -11,9 +11,19 @@ export async function GET(
 ) {
     try {
         const { id } = await params;
-        const agentToken = getAgentToken();
+        const adminToken = getAdminToken();
 
-        const result = await getBooking(id, agentToken);
+        if (!adminToken) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Admin API key is required'
+                },
+                { status: 500 }
+            );
+        }
+
+        const result = await getBooking(id, adminToken);
 
         if (!result.success) {
             return NextResponse.json(
@@ -50,7 +60,17 @@ export async function PATCH(
     try {
         const { id } = await params;
         const body = await request.json();
-        const agentToken = getAgentToken();
+        const adminToken = getAdminToken();
+
+        if (!adminToken) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Admin API key is required'
+                },
+                { status: 500 }
+            );
+        }
 
         // Transform frontend fields to API fields if necessary
         // For now, assuming body matches Partial<CreateBookingRequest> roughly
@@ -68,7 +88,7 @@ export async function PATCH(
         if (body.travelDateTime) apiPayload.pickup_time = body.travelDateTime;
         if (body.note) apiPayload.passenger_notes = body.note;
 
-        const result = await updateBooking(id, apiPayload, agentToken);
+        const result = await updateBooking(id, apiPayload, adminToken);
 
         if (!result.success) {
             return NextResponse.json(
@@ -105,10 +125,21 @@ export async function DELETE(
     try {
         const { id } = await params;
         const body = await request.json();
-        const agentToken = getAgentToken();
+        const adminToken = getAdminToken();
+
+        if (!adminToken) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Admin API key is required'
+                },
+                { status: 500 }
+            );
+        }
+
         const reason = body.cancellation_reason || body.reason || 'Cancelled by admin';
 
-        const result = await cancelBooking(id, reason, agentToken);
+        const result = await cancelBooking(id, reason, adminToken);
 
         if (!result.success) {
             return NextResponse.json(

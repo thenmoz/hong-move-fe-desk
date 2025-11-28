@@ -132,7 +132,7 @@ export async function getBooking(
     const response = await fetch(`${HONGMOVE_API_BASE_URL}/bookings/${bookingId}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${agentToken}`,
+        'x-admin-api-key': agentToken,
       },
     });
 
@@ -184,7 +184,7 @@ export async function listBookings(
 
     if (agentToken) {
       requestInit.headers = {
-        Authorization: `Bearer ${agentToken}`,
+        'x-admin-api-key': agentToken,
       };
     }
 
@@ -223,7 +223,7 @@ export async function updateBooking(
     const response = await fetch(`${HONGMOVE_API_BASE_URL}/bookings/${bookingId}`, {
       method: 'PATCH',
       headers: {
-        'Authorization': `Bearer ${agentToken}`,
+        'x-admin-api-key': agentToken,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
@@ -262,7 +262,7 @@ export async function cancelBooking(
     const response = await fetch(`${HONGMOVE_API_BASE_URL}/bookings/${bookingId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${agentToken}`,
+        'x-admin-api-key': agentToken,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ cancellation_reason: cancellationReason }),
@@ -300,7 +300,7 @@ export async function resendBookingEmail(
     const response = await fetch(`${HONGMOVE_API_BASE_URL}/bookings/${bookingId}/resend-email`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${agentToken}`,
+        'x-admin-api-key': agentToken,
       },
     });
 
