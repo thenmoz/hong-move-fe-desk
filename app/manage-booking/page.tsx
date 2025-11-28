@@ -197,35 +197,35 @@ export default function ManageBookingPage() {
             <div className="py-12 text-center text-gray-500">กำลังโหลดข้อมูลการจอง...</div>
           ) : (
             <>
-              <div className="overflow-x-auto">
-                <table className="min-w-full">
-                  <thead className="bg-[#8b0000] text-white">
+              <div className="max-h-[600px] overflow-auto">
+                <table className="min-w-full table-auto">
+                  <thead className="sticky top-0 z-10 bg-[#8b0000] text-white shadow">
                     <tr>
-                      <th className="px-4 py-3 text-center text-xs font-medium">ลำดับ</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">
+                      <th className="whitespace-nowrap px-3 py-3 text-center text-xs font-medium">ลำดับ</th>
+                      <th className="whitespace-nowrap px-4 py-3 text-center text-xs font-medium">
                         หมายเลข Booking
                       </th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">ชื่อผู้โดยสาร</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">เบอร์โทรศัพท์</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">อีเมล</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">ปลายทาง</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">วันเดินทาง</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">เวลาเดินทาง</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">สถานะ</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">ค่าโดยสาร</th>
-                      <th className="px-4 py-3 text-center text-xs font-medium">ดูข้อมูล</th>
+                      <th className="whitespace-nowrap px-4 py-3 text-center text-xs font-medium">ชื่อผู้โดยสาร</th>
+                      <th className="whitespace-nowrap px-4 py-3 text-center text-xs font-medium">เบอร์โทรศัพท์</th>
+                      <th className="whitespace-nowrap px-4 py-3 text-center text-xs font-medium">อีเมล</th>
+                      <th className="whitespace-nowrap px-4 py-3 text-center text-xs font-medium">ปลายทาง</th>
+                      <th className="whitespace-nowrap px-4 py-3 text-center text-xs font-medium">วันเดินทาง</th>
+                      <th className="whitespace-nowrap px-4 py-3 text-center text-xs font-medium">เวลาเดินทาง</th>
+                      <th className="whitespace-nowrap px-4 py-3 text-center text-xs font-medium">สถานะ</th>
+                      <th className="whitespace-nowrap px-4 py-3 text-center text-xs font-medium">ค่าโดยสาร</th>
+                      <th className="sticky right-0 whitespace-nowrap bg-[#8b0000] px-4 py-3 text-center text-xs font-medium">ดูข้อมูล</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-white">
                     {filteredBookings.map((booking, index) => (
                       <tr
                         key={booking.id}
-                        className={`${index % 2 === 0 ? 'bg-white' : 'bg-red-50'} hover:bg-red-100`}
+                        className={`${index % 2 === 0 ? 'bg-white' : 'bg-red-50'} hover:bg-red-100 transition-colors`}
                       >
-                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
+                        <td className="whitespace-nowrap px-3 py-3 text-center text-sm text-gray-900">
                           {index + 1}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
+                        <td className="whitespace-nowrap px-4 py-3 text-center text-sm font-medium text-gray-900">
                           {booking.bookingNumber}
                         </td>
                         <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
@@ -235,12 +235,12 @@ export default function ManageBookingPage() {
                           {booking.phone}
                         </td>
                         <td className="px-4 py-3 text-center text-sm text-gray-900">
-                          <div className="max-w-[150px] truncate" title={booking.email}>
+                          <div className="max-w-[180px] truncate" title={booking.email}>
                             {booking.email}
                           </div>
                         </td>
                         <td className="px-4 py-3 text-center text-sm text-gray-900">
-                          <div className="max-w-[120px] truncate" title={booking.dropoffLocation}>
+                          <div className="max-w-[150px] truncate" title={booking.dropoffLocation}>
                             {booking.dropoffLocation}
                           </div>
                         </td>
@@ -251,21 +251,21 @@ export default function ManageBookingPage() {
                           {format(new Date(booking.travelDateTime), "HH:mm")}
                         </td>
                         <td className="whitespace-nowrap px-4 py-3 text-center text-sm">
-                          <span className={`font-medium ${getStatusColor(booking.jobStatus)}`}>
+                          <span className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusColor(booking.jobStatus)}`}>
                             {getStatusLabel(booking.jobStatus)}
                           </span>
                         </td>
                         <td className="whitespace-nowrap px-4 py-3 text-center text-sm text-gray-900">
                           {booking.finalMeterPrice
-                            ? `${booking.finalMeterPrice.toLocaleString()}.00`
+                            ? `฿${booking.finalMeterPrice.toLocaleString()}`
                             : "-"}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-3 text-center">
+                        <td className="sticky right-0 whitespace-nowrap bg-inherit px-4 py-3 text-center">
                           <button
                             onClick={() => {
                               window.location.href = `/booking/${booking.id}`;
                             }}
-                            className="inline-flex items-center justify-center rounded-full bg-green-600 p-2 text-white transition-colors hover:bg-green-700"
+                            className="inline-flex items-center justify-center rounded-full bg-green-600 p-2 text-white shadow-sm transition-colors hover:bg-green-700 hover:shadow-md"
                             title="ดูรายละเอียด"
                           >
                             <Eye className="h-4 w-4" />
