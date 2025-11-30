@@ -23,13 +23,14 @@ export async function GET(
             );
         }
 
+        // Backend uses bookingNumber (not UUID) for GET endpoint
         const result = await getBooking(id, adminToken);
 
         if (!result.success) {
             return NextResponse.json(
                 {
                     success: false,
-                    error: result.error?.message || 'Failed to fetch booking'
+                    error: result.error?.message || 'Booking not found'
                 },
                 { status: 404 }
             );

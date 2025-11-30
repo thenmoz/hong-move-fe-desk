@@ -13,7 +13,7 @@ import { th } from "date-fns/locale";
 export default function BookingDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const bookingId = params.id as string;
+  const bookingNumberOrId = params.id as string;
 
   const [booking, setBooking] = useState<Booking | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +27,7 @@ export default function BookingDetailPage() {
   const fetchBooking = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/bookings/${bookingId}`);
+      const response = await fetch(`/api/bookings/${bookingNumberOrId}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -40,13 +40,13 @@ export default function BookingDetailPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [bookingId]);
+  }, [bookingNumberOrId]);
 
   useEffect(() => {
-    if (bookingId) {
+    if (bookingNumberOrId) {
       fetchBooking();
     }
-  }, [bookingId, fetchBooking]);
+  }, [bookingNumberOrId, fetchBooking]);
 
   const handleCancelClick = () => {
     setShowCancelModal(true);
@@ -62,6 +62,12 @@ export default function BookingDetailPage() {
 
     try {
       setIsCancelling(true);
+      // Use booking ID (not bookingNumber) for DELETE operations
+      const bookingId = booking?.id;
+      if (!bookingId) {
+        throw new Error("Booking ID not found");
+      }
+
       const response = await fetch(`/api/bookings/${bookingId}`, {
         method: "DELETE",
         headers: {

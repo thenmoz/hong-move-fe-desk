@@ -135,7 +135,7 @@ export default function CreateBookingPage() {
                       type="text"
                       id="origin"
                       name="origin"
-                      placeholder="สร้างนายหน้าพิเศษ"
+                      placeholder="สถานีต้นทาง"
                       className="mt-2 w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
                     />
                   </div>

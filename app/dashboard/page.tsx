@@ -39,10 +39,14 @@ export default function DashboardPage() {
 
           const newStats = {
             pending: bookings.filter((b) => b.jobStatus === "pending").length,
-            confirmed: bookings.filter((b) => b.jobStatus === "confirmed").length,
-            inProgress: bookings.filter((b) => b.jobStatus === "in_progress").length,
-            completed: bookings.filter((b) => b.jobStatus === "completed").length,
-            cancelled: bookings.filter((b) => b.jobStatus === "cancelled").length,
+            confirmed: bookings.filter((b) => b.jobStatus === "confirmed")
+              .length,
+            inProgress: bookings.filter((b) => b.jobStatus === "in_progress")
+              .length,
+            completed: bookings.filter((b) => b.jobStatus === "completed")
+              .length,
+            cancelled: bookings.filter((b) => b.jobStatus === "cancelled")
+              .length,
             totalRevenue: bookings
               .filter((b) => b.paymentStatus === "paid" && b.finalMeterPrice)
               .reduce((sum, b) => sum + (b.finalMeterPrice || 0), 0),
@@ -61,12 +65,12 @@ export default function DashboardPage() {
 
   const overviewStats = [
     {
-      label: "ค่าจำนวนบุ๊กกิ้งรับแล้ว",
+      label: "จำนวนผู้ขับรถในระบบ",
       value: stats.confirmed.toString(),
       icon: ClipboardPlus,
     },
     {
-      label: "รอเรื่องดูบ้านหมายนี้", // Assuming this maps to pending for now, or maybe another status?
+      label: "รถที่ว่างอยู่ในขณะนี้", // Assuming this maps to pending for now, or maybe another status?
       value: stats.pending.toString(),
       icon: Clock3,
     },
@@ -126,9 +130,7 @@ export default function DashboardPage() {
               key={stat.label}
               className="rounded-xl border border-slate-200 bg-slate-100 px-6 py-6 text-center shadow-sm"
             >
-              <p className="text-sm font-medium text-slate-600">
-                {stat.label}
-              </p>
+              <p className="text-sm font-medium text-slate-600">{stat.label}</p>
               <p className="mt-3 text-4xl font-bold text-slate-800">
                 {isLoading ? "-" : stat.value}
               </p>

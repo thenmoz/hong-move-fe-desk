@@ -263,7 +263,7 @@ export default function ManageBookingPage() {
                         <td className="sticky right-0 whitespace-nowrap bg-inherit px-4 py-3 text-center">
                           <button
                             onClick={() => {
-                              window.location.href = `/booking/${booking.id}`;
+                              window.location.href = `/booking/${booking.bookingNumber}`;
                             }}
                             className="inline-flex items-center justify-center rounded-full bg-green-600 p-2 text-white shadow-sm transition-colors hover:bg-green-700 hover:shadow-md"
                             title="ดูรายละเอียด"
