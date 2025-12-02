@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Input } from '@/components/ui/Input';
+import { LocationDropdown } from '@/components/ui/LocationDropdown';
 import { Button } from '@/components/ui/Button';
 import type { BookingFormData } from '@/types/booking';
 
@@ -330,12 +331,11 @@ export default function CustomerBookingPage() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b">จุดรับ-ส่ง</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input
-                    label="จุดรับ (Pickup) *"
-                    type="text"
-                    placeholder="ท่าอากาศยาน, โรงแรม, ที่อยู่"
+                  <LocationDropdown
+                    label="จุดรับ (Pickup)"
+                    placeholder="เลือกจุดรับ"
                     value={formData.pickupLocation}
-                    onChange={(e) => handleChange('pickupLocation', e.target.value)}
+                    onChange={(value) => handleChange('pickupLocation', value)}
                     required
                   />
                   <Input

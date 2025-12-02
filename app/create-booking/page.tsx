@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Modal } from "@/components/ui/Modal";
+import { LocationDropdown } from "@/components/ui/LocationDropdown";
 
 export default function CreateBookingPage() {
   const router = useRouter();
@@ -125,18 +126,11 @@ export default function CreateBookingPage() {
                 </h2>
                 <div className="mt-6 grid gap-6 sm:grid-cols-2">
                   <div>
-                    <label
-                      htmlFor="origin"
-                      className="block text-sm font-medium text-slate-600"
-                    >
-                      ต้นทาง
-                    </label>
-                    <input
-                      type="text"
-                      id="origin"
-                      name="origin"
-                      placeholder="สถานีต้นทาง"
-                      className="mt-2 w-full rounded-lg border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
+                    <LocationDropdown
+                      label="ต้นทาง (จุดรับ)"
+                      placeholder="เลือกจุดรับ"
+                      value={formData.origin}
+                      onChange={(value) => setFormData({ ...formData, origin: value })}
                     />
                   </div>
 
@@ -145,12 +139,15 @@ export default function CreateBookingPage() {
                       htmlFor="destination"
                       className="block text-sm font-medium text-slate-600"
                     >
-                      ปลายทาง*
+                      ปลายทาง (จุดส่ง)*
                     </label>
                     <input
                       type="text"
                       id="destination"
                       name="destination"
+                      placeholder="ท่าอากาศยาน, โรงแรม, ที่อยู่"
+                      value={formData.destination}
+                      onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
                       className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:border-[#8b0000] focus:outline-none focus:ring-1 focus:ring-[#8b0000]"
                       required
                     />

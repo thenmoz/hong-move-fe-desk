@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Booking, BookingFormData } from '@/types/booking';
 import { Input } from '@/components/ui/Input';
+import { LocationDropdown } from '@/components/ui/LocationDropdown';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 
@@ -82,12 +83,11 @@ export const BookingForm: React.FC<BookingFormProps> = ({
               จุดรับ-ส่ง
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Input
-                label="จุดรับ (Pickup) *"
-                type="text"
-                placeholder="ท่าอากาศยาน, โรงแรม, ที่อยู่"
+              <LocationDropdown
+                label="จุดรับ (Pickup)"
+                placeholder="เลือกจุดรับ"
                 value={formData.pickupLocation}
-                onChange={(e) => handleChange('pickupLocation', e.target.value)}
+                onChange={(value) => handleChange('pickupLocation', value)}
                 required
               />
               <Input
